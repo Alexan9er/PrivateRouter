@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { Redirect } from 'react-router-dom';
 
 class Login extends React.Component {
@@ -22,9 +23,19 @@ class Login extends React.Component {
     );
   };
 
+  handleChange = (e) => {
+    const { value } = e.currentTarget;
+    const { fieldName } = e.currentTarget.dataset;
+
+    this.setState(prev => ({
+      ...prev,
+      [fieldName]: value,
+    }));
+  };
+
   render() {
     const { location, errorMsg } = this.props;
-    const { from } = location.state || { from: '/' };
+    const { from } = location.state || { from: { pathname: '/' } };
     const { username, password, redirectToPreviousRoute } = this.state;
 
     if (redirectToPreviousRoute) {
@@ -32,25 +43,38 @@ class Login extends React.Component {
     }
 
     return (
-      <form onSubmit={this.handleSubmit}>
-        <input
-          data-field-name="username"
-          type="text"
-          onChange={this.handleChange}
-          placeholder="Имя"
-          value={username}
-        />
-        <input
-          data-field-name="password"
-          type="text"
-          onChange={this.handleChange}
-          placeholder="Пароль"
-          value={password}
-        />
-        <button type="submit">Log in</button>
-      </form>
+      <React.Fragment>
+        {errorMsg && <p>{errorMsg}</p>}
+
+        <form onSubmit={this.handleSubmit}>
+          <input
+            data-field-name="username"
+            type="text"
+            onChange={this.handleChange}
+            placeholder="Имя"
+            value={username}
+          />
+          <input
+            data-field-name="password"
+            type="text"
+            onChange={this.handleChange}
+            placeholder="Пароль"
+            value={password}
+          />
+          <button type="submit">Log in</button>
+        </form>
+      </React.Fragment>
     );
   }
 }
+
+Login.propTypes = {
+  logIn: PropTypes.func.isRequired,
+  errorMsg: PropTypes.string,
+};
+
+Login.defaultProps = {
+  errorMsg: '',
+};
 
 export default Login;

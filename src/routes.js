@@ -1,6 +1,6 @@
 import News from './pages/news';
 import Profile from './pages/profile';
-import Login from './pages/login';
+import Login from './containers/LoginContainer';
 import Home from './pages/home';
 
 export const routes = [
